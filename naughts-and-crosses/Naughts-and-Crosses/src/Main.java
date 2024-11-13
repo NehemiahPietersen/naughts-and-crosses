@@ -28,14 +28,30 @@ public class Main {
             Scanner scan = new Scanner(System.in);
             System.out.println("Enter your position: (from 1-9)");
             int userInput = scan.nextInt();
+            while (playerPositions.contains(userInput) || cpuPositions.contains(userInput)) {
+                System.out.println("Choose another position. It's already taken");
+                userInput = scan.nextInt();
+            }
 
             placePieces(gameBoard, userInput, "player");
+            String result = checkWinner();
+            if (result.length() > 0) {
+                System.out.println("Winner is: " + result);
+                break;
+            }
 
             Random random = new Random();
             int cpuInput = random.nextInt(9) + 1;
+            while (playerPositions.contains(cpuInput) || cpuPositions.contains(cpuInput)) {
+                cpuInput = random.nextInt(9) + 1;
+            }
             placePieces(gameBoard, cpuInput, "cpu");
             printGameBoard(gameBoard);
-            checkWinner();
+            result = checkWinner();
+            if (result.length() > 0) {
+                System.out.println("Winner is: " + result);
+                break;
+            }
         }
     }
 
@@ -53,8 +69,10 @@ public class Main {
 
         if (user.equals("player")) {
             symbol = 'X';
+            playerPositions.add(userInput);
         } else if (user.equals("cpu")) {
             symbol = '0';
+            cpuPositions.add(userInput);
         }
 
         switch (userInput) {
